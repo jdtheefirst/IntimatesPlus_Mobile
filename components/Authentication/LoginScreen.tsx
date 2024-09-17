@@ -28,7 +28,7 @@ const LoginScreen: React.FC = () => {
   };
 
   return (
-    <></> // Your component UI
+    <div>Log In page</div> // Your component UI
   );
 };
 
