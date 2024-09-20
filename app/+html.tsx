@@ -1,10 +1,8 @@
+/// <reference types="nativewind/types" />
+
 import { ScrollViewStyleReset } from "expo-router/html";
 import { StatusBar } from "expo-status-bar";
-import {
-  ScrollView,
-  Text,
-  View,
-} from "react-native-reanimated/lib/typescript/Animated";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 
