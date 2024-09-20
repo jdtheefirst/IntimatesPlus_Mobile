@@ -1,5 +1,11 @@
-import { store } from "@/redux/store";
 import { ScrollViewStyleReset } from "expo-router/html";
+import { StatusBar } from "expo-status-bar";
+import {
+  ScrollView,
+  Text,
+  View,
+} from "react-native-reanimated/lib/typescript/Animated";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 
 // This file is web-only and used to configure the root HTML for every
@@ -28,7 +34,30 @@ export default function Root({ children }: { children: React.ReactNode }) {
         {/* Add any additional <head> elements that you want globally available on web... */}
       </head>
       <body>
-        <Provider store={store}>{children}</Provider>
+        <SafeAreaView className="bg-primary h-full">
+          <ScrollView
+            contentContainerStyle={{
+              height: "100%",
+            }}
+          >
+            <View className="w-full flex justify-center items-center h-full px-4">
+              <View className="relative mt-5">
+                <Text className="text-3xl text-white font-bold text-center">
+                  Discover Endless{"\n"}
+                  Possibilities with{" "}
+                  <Text className="text-secondary-200">Aora</Text>
+                </Text>
+              </View>
+
+              <Text className="text-sm font-pregular text-gray-100 mt-7 text-center">
+                Where Creativity Meets Innovation: Embark on a Journey of
+                Limitless Exploration with Aora
+              </Text>
+            </View>
+          </ScrollView>
+
+          <StatusBar backgroundColor="#161622" style="light" />
+        </SafeAreaView>
       </body>
     </html>
   );
