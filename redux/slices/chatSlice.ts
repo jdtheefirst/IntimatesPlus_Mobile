@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface ChatState {
+interface AppState {
   verify: boolean | undefined;
   selectedChat: string | undefined;
   user: any; // Consider defining a specific type for user if possible
@@ -15,9 +15,11 @@ interface ChatState {
   recoverEmail: string | undefined;
   ads: boolean;
   isCallStarted: boolean;
+  loading: boolean;
+  logged: boolean;
 }
 
-const initialState: ChatState = {
+const initialState: AppState = {
   verify: undefined,
   selectedChat: undefined,
   user: null,
@@ -32,68 +34,70 @@ const initialState: ChatState = {
   recoverEmail: undefined,
   ads: false,
   isCallStarted: false,
+  loading: false,
+  logged: false,
 };
 
-const chatSlice = createSlice({
-  name: "chat",
+const AppSlice = createSlice({
+  name: "App",
   initialState,
   reducers: {
     setVerify: (
-      state: ChatState,
+      state: AppState,
       action: PayloadAction<boolean | undefined>
     ) => {
       state.verify = action.payload;
     },
     setSelectedChat: (
-      state: ChatState,
+      state: AppState,
       action: PayloadAction<string | undefined>
     ) => {
       state.selectedChat = action.payload;
     },
-    setUser: (state: ChatState, action: PayloadAction<any>) => {
+    setUser: (state: AppState, action: PayloadAction<any>) => {
       state.user = action.payload;
     },
-    setTrend: (state: ChatState, action: PayloadAction<boolean>) => {
+    setTrend: (state: AppState, action: PayloadAction<boolean>) => {
       state.trend = action.payload;
     },
-    setNotification: (state: ChatState, action: PayloadAction<any[]>) => {
+    setNotification: (state: AppState, action: PayloadAction<any[]>) => {
       state.notification = action.payload;
     },
-    setChats: (state: ChatState, action: PayloadAction<any[]>) => {
+    setChats: (state: AppState, action: PayloadAction<any[]>) => {
       state.chats = action.payload;
     },
-    setOnlineUsersCount: (
-      state: ChatState,
-      action: PayloadAction<number[]>
-    ) => {
+    setOnlineUsersCount: (state: AppState, action: PayloadAction<number[]>) => {
       state.onlineUsersCount = action.payload;
     },
-    setUserId: (
-      state: ChatState,
-      action: PayloadAction<string | undefined>
-    ) => {
+    setUserId: (state: AppState, action: PayloadAction<string | undefined>) => {
       state.userId = action.payload;
     },
-    setEmail: (state: ChatState, action: PayloadAction<string>) => {
+    setEmail: (state: AppState, action: PayloadAction<string>) => {
       state.email = action.payload;
     },
-    setName: (state: ChatState, action: PayloadAction<string>) => {
+    setName: (state: AppState, action: PayloadAction<string>) => {
       state.name = action.payload;
     },
-    setPic: (state: ChatState, action: PayloadAction<string>) => {
+    setPic: (state: AppState, action: PayloadAction<string>) => {
       state.pic = action.payload;
     },
     setRecoverEmail: (
-      state: ChatState,
+      state: AppState,
       action: PayloadAction<string | undefined>
     ) => {
       state.recoverEmail = action.payload;
     },
-    setAds: (state: ChatState, action: PayloadAction<boolean>) => {
+    setAds: (state: AppState, action: PayloadAction<boolean>) => {
       state.ads = action.payload;
     },
-    setIsCallStarted: (state: ChatState, action: PayloadAction<boolean>) => {
+    setIsCallStarted: (state: AppState, action: PayloadAction<boolean>) => {
       state.isCallStarted = action.payload;
+    },
+    setLoading: (state: AppState, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
+    setLogged: (state: AppState, action: PayloadAction<boolean>) => {
+      state.logged = action.payload;
     },
   },
 });
@@ -113,6 +117,8 @@ export const {
   setRecoverEmail,
   setAds,
   setIsCallStarted,
-} = chatSlice.actions;
+  setLoading,
+  setLogged,
+} = AppSlice.actions;
 
-export default chatSlice.reducer;
+export default AppSlice.reducer;

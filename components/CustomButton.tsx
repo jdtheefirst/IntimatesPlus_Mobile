@@ -1,13 +1,13 @@
 /// <reference types="nativewind/types" />
 
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
-import { GestureResponderEvent, TextStyle, ViewStyle } from "react-native";
+import { GestureResponderEvent } from "react-native";
 
 interface CustomButtonProps {
   title: string;
   handlePress: (event: GestureResponderEvent) => void;
   containerStyles?: string; // Tailwind class for styling
-  textStyles?: string; // Tailwind class for text styling
+  TextStyle?: string; // Tailwind class for text styling
   isLoading?: boolean;
 }
 
@@ -15,7 +15,7 @@ const CustomButton = ({
   title,
   handlePress,
   containerStyles = "", // Default empty string if no styles passed
-  textStyles = "",
+  TextStyle = "",
   isLoading = false,
 }: CustomButtonProps) => {
   return (
@@ -27,7 +27,7 @@ const CustomButton = ({
       }`}
       disabled={isLoading}
     >
-      <Text className={`text-primary font-psemibold text-lg ${textStyles}`}>
+      <Text className={`text-primary font-bold text-lg ${TextStyle}`}>
         {title}
       </Text>
 

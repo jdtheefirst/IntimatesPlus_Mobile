@@ -1,111 +1,114 @@
+/// <reference types="nativewind/types" />
+
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  Button,
-  Text,
-  Alert,
-  ActivityIndicator,
-} from "react-native";
-import axios from "axios";
-import { useNavigation } from "@react-navigation/native"; // React Native Navigation
-import { AppDispatch } from "../../redux/store"; // Assuming you're using Redux Toolkit
+import { SafeAreaView } from "react-native-safe-area-context";
+import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
 import { useDispatch } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "@/.expo/types/routes";
+import axios from "axios";
+import { Link, router } from "expo-router";
+import { AppDispatch } from "@/redux/store"; // Adjust the path as per your store location
+import { setLogged, setUser } from "@/redux/slices/chatSlice";
+import { CustomButton, FormField } from "@/components/index"; // Adjust path to components
+import images from "@/constants/images";
 
-const Login: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [forgotEmail, setForgotEmail] = useState<string>("");
-  const [searching, setSearching] = useState<boolean>(false);
-  const [disable, setDisable] = useState<boolean>(false);
-  type NavigationProp = NativeStackNavigationProp<RootStackParamList, "Chats">;
+// Define the form structure type
+interface FormState {
+  email: string;
+  password: string;
+}
 
-  const navigation = useNavigation<NavigationProp>();
+const SignIn: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>(); // Type for dispatch function
+  const [isSubmitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState<FormState>({
+    email: "",
+    password: "",
+  });
 
-  const dispatch = useDispatch<AppDispatch>();
-
-  const submitHandler = async () => {
-    setLoading(true);
-    if (!email || !password) {
-      Alert.alert("Warning", "Please fill all the fields.");
-      setLoading(false);
-      return;
+  const submit = async () => {
+    if (form.email === "" || form.password === "") {
+      Alert.alert("Error", "Please fill in all fields");
+      return; // Avoid proceeding if fields are empty
     }
 
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-      const { data } = await axios.post(
-        "https://your-api-endpoint/api/user/login", // Update this to your backend
-        { email, password },
-        config
-      );
-      // Use AsyncStorage instead of localStorage for React Native
-      AsyncStorage.setItem("userInfo", JSON.stringify(data));
+    setSubmitting(true);
 
-      setLoading(false);
-      navigation.navigate("Chats"); // Navigate to the chats screen
-    } catch (error) {
-      Alert.alert("Error", "Wrong email or password");
-      setLoading(false);
-    }
-  };
-
-  const forgotPassword = async () => {
-    setSearching(true);
-    setDisable(true);
     try {
-      const { data } = await axios.get(
-        `https://your-api-endpoint/api/user/account/${forgotEmail}`
-      );
-      if (data) {
-        navigation.navigate("AccountRecovery");
-        // Dispatch any Redux action for verification or update local state
-      } else {
-        Alert.alert("Info", "Email not found.");
-      }
-      setSearching(false);
-      setTimeout(() => setDisable(false), 30000);
-    } catch (error) {
-      Alert.alert("Error", "An error occurred during password recovery.");
-      setSearching(false);
-      setTimeout(() => setDisable(false), 30000);
+      // Simulating API call - ensure your endpoint is correctly set up
+      const result = await axios.post("/api/user/login", {
+        email: form.email,
+        password: form.password,
+      });
+
+      dispatch(setUser(result.data)); // Assuming result.data contains user information
+      dispatch(setLogged(true)); // Set user as logged in
+
+      Alert.alert("Success", "User signed in successfully");
+      router.replace("/(tabs)"); // Navigate to tabs screen after login
+    } catch (error: any) {
+      Alert.alert("Error", error.response?.data?.message || error.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <View style={{ padding: 20 }}>
-      <TextInput
-        placeholder="Enter your email"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-      />
-      <TextInput
-        placeholder="Enter your password"
-        value={password}
-        secureTextEntry
-        onChangeText={(text) => setPassword(text)}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-      />
-      <Button title="Login" onPress={submitHandler} disabled={loading} />
-      {loading && <ActivityIndicator size="small" />}
-      <Text
-        onPress={() => forgotPassword()}
-        style={{ color: "blue", marginTop: 10 }}
-      >
-        Forgot Password?
-      </Text>
-      {searching && <ActivityIndicator size="small" />}
-    </View>
+    <SafeAreaView className="bg-primary h-full">
+      <ScrollView>
+        <View
+          className="w-full flex justify-center h-full px-4 my-6"
+          style={{
+            minHeight: Dimensions.get("window").height - 100,
+          }}
+        >
+          <Image
+            source={images.IntimatesPlus}
+            resizeMode="contain"
+            className="w-[60px] h-[60px]"
+          />
+
+          <Text className="text-2xl font-bold text-white mt-10 font-psemibold">
+            Log in to IntimatesPlus
+          </Text>
+
+          <FormField
+            title="Email"
+            value={form.email}
+            handleChangeText={(e) => setForm({ ...form, email: e })}
+            otherStyles="mt-7"
+            keyboardType="email-address"
+          />
+
+          <FormField
+            title="Password"
+            value={form.password}
+            handleChangeText={(e) => setForm({ ...form, password: e })}
+            otherStyles="mt-7"
+            secureTextEntry // Hide password characters
+          />
+
+          <CustomButton
+            title="Sign In"
+            handlePress={submit}
+            containerStyles="mt-7"
+            isLoading={isSubmitting}
+          />
+
+          <View className="flex justify-center pt-5 flex-row gap-2">
+            <Text className="text-lg text-gray-100 font-pregular">
+              Don't have an account?
+            </Text>
+            <Link
+              href="/(tabs)"
+              className="text-lg font-psemibold text-secondary"
+            >
+              Signup
+            </Link>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
-export default Login;
+export default SignIn;
