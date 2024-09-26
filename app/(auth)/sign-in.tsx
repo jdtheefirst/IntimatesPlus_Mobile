@@ -6,10 +6,11 @@ import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { Link, router } from "expo-router";
-import { AppDispatch } from "@/redux/store"; // Adjust the path as per your store location
+import { AppDispatch } from "@/redux/slices/chatSlice"; // Adjust the path as per your store location
 import { setLogged, setUser } from "@/redux/slices/chatSlice";
 import { CustomButton, FormField } from "@/components/index"; // Adjust path to components
 import images from "@/constants/images";
+import { ExternalLink } from "@/components/ExternalLink";
 
 // Define the form structure type
 interface FormState {
@@ -19,13 +20,20 @@ interface FormState {
 
 const SignIn: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>(); // Type for dispatch function
-  const [isSubmitting, setSubmitting] = useState(false);
+
+  const [isSubmitting, setSubmitting] = useState<boolean>(false);
+
   const [form, setForm] = useState<FormState>({
     email: "",
     password: "",
   });
 
   const submit = async () => {
+    if (form.email || form.password) {
+      router.replace("/(tabs)");
+      return;
+    }
+
     if (form.email === "" || form.password === "") {
       Alert.alert("Error", "Please fill in all fields");
       return; // Avoid proceeding if fields are empty
@@ -98,12 +106,8 @@ const SignIn: React.FC = () => {
             <Text className="text-lg text-gray-100 font-pregular">
               Don't have an account?
             </Text>
-            <Link
-              href="/(tabs)"
-              className="text-lg font-psemibold text-secondary"
-            >
-              Signup
-            </Link>
+
+            <ExternalLink href="https://fuckmate.boo">Signup</ExternalLink>
           </View>
         </View>
       </ScrollView>
