@@ -18,7 +18,7 @@ interface FormState {
 }
 
 const SignIn: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>(); // Type for dispatch function
+  const dispatch: AppDispatch = useDispatch(); // Type for dispatch function
 
   const [isSubmitting, setSubmitting] = useState<boolean>(false);
 
@@ -29,7 +29,7 @@ const SignIn: React.FC = () => {
 
   const submit = async () => {
     if (form.email || form.password) {
-      router.replace("/(tabs)");
+      router.replace("/(tabs)/home");
       return;
     }
 
@@ -58,23 +58,28 @@ const SignIn: React.FC = () => {
       setSubmitting(false);
     }
   };
-
   return (
-    <SafeAreaView className="bg-primary h-full">
-      <ScrollView>
-        <View
-          className="w-full flex justify-center h-full px-4 my-6"
-          style={{
-            minHeight: Dimensions.get("window").height - 100,
-          }}
-        >
+    <SafeAreaView className="bg-primary flex-1">
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+        keyboardShouldPersistTaps="handled" // Ensures taps on buttons work when keyboard is up
+      >
+        <View className="flex-1 justify-center items-center px-4">
           <Image
             source={images.IntimatesPlus}
+            className="w-[130px] h-[84px]"
             resizeMode="contain"
-            className="w-[60px] h-[60px]"
           />
 
-          <Text className="text-2xl font-bold text-white mt-10 font-psemibold">
+          <Image
+            source={images.cards}
+            className="max-w-[380px] w-full h-[298px]"
+            resizeMode="contain"
+          />
+        </View>
+
+        <View className="w-full flex justify-center px-4 my-6">
+          <Text className="text-2xl font-bold text-white mt-10 font-psemibold text-center">
             Log in to IntimatesPlus
           </Text>
 

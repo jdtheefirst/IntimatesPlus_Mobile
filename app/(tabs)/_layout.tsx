@@ -4,12 +4,12 @@ import { StatusBar } from "expo-status-bar";
 import { Redirect, Tabs } from "expo-router";
 import { Image, Text, View } from "react-native";
 import { useSelector } from "react-redux";
-import icons from "@/constants/icons"; // Ensure this path is correct
-import { Loader } from "@/components"; // Ensure this path is correct
-import { selectLoading, selectLogged } from "@/redux/store"; // Ensure this path is correct
+import icons from "@/constants/icons";
+import { Loader } from "@/components";
+import { selectLoading, selectLogged } from "@/redux/store";
 
 interface TabIconProps {
-  icon: any; // Replace 'any' with the appropriate type for your icon (e.g., ImageSourcePropType)
+  icon: any;
   color: string;
   name: string;
   focused: boolean;
@@ -38,7 +38,7 @@ const TabLayout: React.FC = () => {
   const loading = useSelector(selectLoading);
   const isLogged = useSelector(selectLogged);
 
-  if (!loading && !isLogged) return <Redirect href="/sign-in" />;
+  // if (!loading && !isLogged) return <Redirect href="/sign-in" />;
 
   return (
     <>
