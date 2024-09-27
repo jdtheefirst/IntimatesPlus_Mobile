@@ -14,7 +14,7 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/components/useColorScheme";
 import { Provider } from "react-redux";
-import { store } from "@/redux/slices/chatSlice";
+import { store } from "@/redux/store";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -72,6 +72,7 @@ function RootLayoutNav() {
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          <Stack.Screen name="+not-found" options={{ title: "Not Found" }} />
         </Stack>
       </ThemeProvider>
     </Provider>

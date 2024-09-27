@@ -6,9 +6,8 @@ import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { Link, router } from "expo-router";
-import { AppDispatch } from "@/redux/slices/chatSlice"; // Adjust the path as per your store location
-import { setLogged, setUser } from "@/redux/slices/chatSlice";
-import { CustomButton, FormField } from "@/components/index"; // Adjust path to components
+import { AppDispatch, setLogged, setUser } from "@/redux/store";
+import { CustomButton, FormField } from "@/components/index";
 import images from "@/constants/images";
 import { ExternalLink } from "@/components/ExternalLink";
 
